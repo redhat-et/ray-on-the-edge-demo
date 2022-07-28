@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+resources:
+  - operator/
+  - ray-cluster-template-cm.yaml
+  - ray-custom-resources.yaml
+  - ray-jh-rolebinding.yaml
+  - ray-ml-notebook.yaml
+  - ray-ml-profile-cm.yaml

@@ -1,0 +1,10 @@
+ray
+ray[tune]
+ray[data]
+tune_sklearn
+scikit-learn
+torch
+torch-vision
+tensorflow
+dask
+memory_profiler
