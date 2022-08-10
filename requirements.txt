@@ -4,7 +4,7 @@ ray[data]
 tune_sklearn
 scikit-learn
 torch
-torch-vision
+torchvision
 tensorflow
 dask
 memory_profiler
