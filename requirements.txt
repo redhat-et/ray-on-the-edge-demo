@@ -1,10 +1,13 @@
-ray
+ray==1.13.0
 ray[tune]
 ray[data]
+ray[serve]
 tune_sklearn
 scikit-learn
 torch
 torchvision
-tensorflow
 dask
 memory_profiler
+openshift-client
+python-dotenv
+matplotlib 
