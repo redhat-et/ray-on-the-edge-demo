@@ -17,6 +17,8 @@ memory_limit = os.environ["MEMORY_LIMIT"]
 gpu_limit = os.environ["GPU_LIMIT"]
 
 
+oc.update_api_resources()
+
 def start_ray_cluster(cluster_name=cluster_name):
     os.environ["RAY_CLUSTER_NAME"] = cluster_name
     with oc.api_server(server):
@@ -42,11 +44,18 @@ def start_ray_cluster(cluster_name=cluster_name):
                      }
 
     applied_template = Template(open("../deploy/cluster_collection/cluster_template.yaml").read())
+    applied_route = Template(open("../deploy/cluster_collection/route_template.yaml").read())
 
     with oc.api_server(server):
         with oc.token(token):
             with oc.project(project):
                 oc.apply(applied_template.render(template_data))
+                oc.apply(applied_route.render(template_data))
+                response = oc.invoke('get', ["route", f"ray-serving-{cluster_name}",
+                                             "-o","jsonpath='{$.spec.host}'"])
+   
+    os.environ["SERVING_ENDPOINT"] = response.as_dict()["actions"][0]["out"].strip("'")            
+    print(f"RayCluster {cluster_name} has started")
 
 
 def stop_ray_cluster(cluster_name=cluster_name):
@@ -54,4 +63,5 @@ def stop_ray_cluster(cluster_name=cluster_name):
         with oc.token(token):
             with oc.project(project):
                 oc.invoke('delete', ["RayCluster", cluster_name])
+                oc.invoke('delete', ["Route", f"ray-serving-{cluster_name}"])
                 print("done")

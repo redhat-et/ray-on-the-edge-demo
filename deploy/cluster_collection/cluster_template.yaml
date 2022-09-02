@@ -77,7 +77,7 @@ spec:
               nvidia.com/gpu: {{ gpu_limit }}
   - name: worker-nodes
     # we can parameterize this when we fix the JH launcher json/jinja bug
-    minWorkers: 0
+    minWorkers: 1
     maxWorkers: 3
     podConfig:
       apiVersion: v1
