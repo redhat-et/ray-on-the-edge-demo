@@ -73,7 +73,7 @@ spec:
               # the object store size is not set manually, ray will
               # allocate a very large object store in each pod that may
               # cause problems for other pods.
-              memory: {{ memory_limit }}Gi
+              memory: {{ memory_limit }}
               nvidia.com/gpu: {{ gpu_limit }}
   - name: worker-nodes
     # we can parameterize this when we fix the JH launcher json/jinja bug
@@ -106,10 +106,10 @@ spec:
           resources:
             requests:
               cpu: {{ cpu_request }}
-              memory: {{ memory_request }}Gi
+              memory: {{ memory_request }}
             limits:
               cpu: {{ cpu_limit }}
-              memory: {{ memory_limit }}Gi
+              memory: {{ memory_limit }}
               nvidia.com/gpu: {{ gpu_limit }}
   # Commands to start Ray on the head node. You don't need to change this.
   # Note dashboard-host is set to 0.0.0.0 so that Kubernetes can port forward.

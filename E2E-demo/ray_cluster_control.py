@@ -17,8 +17,6 @@ memory_limit = os.environ["MEMORY_LIMIT"]
 gpu_limit = os.environ["GPU_LIMIT"]
 
 
-oc.update_api_resources()
-
 def start_ray_cluster(cluster_name=cluster_name):
     os.environ["RAY_CLUSTER_NAME"] = cluster_name
     with oc.api_server(server):
