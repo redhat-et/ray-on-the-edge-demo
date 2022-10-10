@@ -50,6 +50,7 @@ def start_ray_cluster(cluster_name=cluster_name):
         with oc.token(token):
             with oc.project(project):
                 oc.apply(applied_template.render(template_data))
+                #oc.invoke("label", ["service", f"{cluster-name"])
                 oc.apply(applied_serving_route.render(template_data))
                 oc.apply(applied_dashboard_route.render(template_data))
                 serve_response = oc.invoke('get', ["route", f"ray-serving-{cluster_name}",
