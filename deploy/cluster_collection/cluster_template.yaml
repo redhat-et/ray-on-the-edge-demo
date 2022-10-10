@@ -50,6 +50,7 @@ spec:
           - containerPort: 10001  # Used by Ray Client
           - containerPort: 8265  # Used by Ray Dashboard
           - containerPort: 8000 # Used by Ray Serve
+          - containerPort: 8080 # Use by monitroing
           # This volume allocates shared memory for Ray to use for plasma
           env:
           # defining HOME is part of a workaround for:
@@ -63,7 +64,7 @@ spec:
             requests:
               cpu: {{ cpu_request }}
               memory: {{ memory_request }}
-              ephemeral-storage: 5Gi
+              ephemeral-storage: 1Gi
             limits:
               cpu: {{ cpu_limit }}
               # The maximum memory that this pod is allowed to use. The
@@ -113,9 +114,14 @@ spec:
               nvidia.com/gpu: {{ gpu_limit }}
   # Commands to start Ray on the head node. You don't need to change this.
   # Note dashboard-host is set to 0.0.0.0 so that Kubernetes can port forward.
+  
+  headServicePorts:
+      - name: monitoring
+        port: 8080
+        targetPort: 8080
   headStartRayCommands:
       - cd /home/ray; pipenv run ray stop
-      - ulimit -n 65536; cd /home/ray; pipenv run ray start --head --no-monitor --port=6379 --object-manager-port=8076 --dashboard-host=0.0.0.0
+      - ulimit -n 65536; cd /home/ray; pipenv run ray start --head --metrics-export-port=8080 --port=6379 --object-manager-port=8076 --dashboard-host=0.0.0.0
   # Commands to start Ray on worker nodes. You don't need to change this.
   workerStartRayCommands:
       - cd /home/ray; pipenv run ray stop
