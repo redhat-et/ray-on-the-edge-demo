@@ -41,7 +41,7 @@ spec:
         containers:
         - name: ray-node
           imagePullPolicy: Always
-          image: quay.io/thoth-station/ray-ml-worker:v0.2.1
+          image: quay.io/thoth-station/ray-ml-worker:pr-29
           # Do not change this command - it keeps the pod alive until it is explicitly killed.
           command: ["/bin/bash", "-c", "--"]
           args: ['trap : TERM INT; sleep infinity & wait;']
@@ -95,7 +95,7 @@ spec:
         containers:
         - name: ray-node
           imagePullPolicy: Always
-          image: quay.io/thoth-station/ray-ml-worker:v0.2.1
+          image: quay.io/thoth-station/ray-ml-worker:pr-29
           command: ["/bin/bash", "-c", "--"]
           args: ["trap : TERM INT; sleep infinity & wait;"]
           env:
@@ -121,8 +121,9 @@ spec:
         targetPort: 8080
   headStartRayCommands:
       - cd /home/ray; pipenv run ray stop
-      - ulimit -n 65536; cd /home/ray; pipenv run ray start --head --metrics-export-port=8080 --port=6379 --object-manager-port=8076 --dashboard-host=0.0.0.0
+      - ulimit -n 65536; cd /home/ray; pipenv run ray start --head --metrics-export-port=8080 --port=6379 --object-manager-port=8076 --dashboard-host=0.0.0.0 --storage=file:///tmp/ray/workflow_data
   # Commands to start Ray on worker nodes. You don't need to change this.
   workerStartRayCommands:
       - cd /home/ray; pipenv run ray stop
       - ulimit -n 65536; cd /home/ray; pipenv run ray start --address=$RAY_HEAD_IP:6379 --object-manager-port=8076
+
